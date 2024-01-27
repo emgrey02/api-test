@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			body {
+				display: flex;
+				width: 100%;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				font-family: 'Courier New', Courier, monospace;
+			}
+
+			form {
+				padding-block: 1em;
+			}
+
+			button,
+			input[type='submit'] {
+				cursor: pointer;
+				background: lightblue;
+				border: 1px solid gray;
+				padding: 0.2em 1em;
+				font-size: 18px;
+				border-radius: 0.3em;
+				margin-block: 0.5em;
+				font-family: inherit;
+
+				&:hover {
+					background: rgb(175, 175, 204);
+				}
+			}
+
+			fieldset {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5em;
+			}
+
+			input {
+				font-family: inherit;
+				padding: 0.3em;
+			}
+
+			img {
+				margin-block: 2em;
+				outline: 2px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<form>
+			<fieldset>
+				<label for="search">Search Giphy</label>
+				<input id="search" type="text" />
+
+				<input type="submit" value="Search" />
+			</fieldset>
+		</form>
+		<button>Another one</button>
+		<img src="#" />
+		<script>
+			const img = document.querySelector('img');
+			const button = document.querySelector('button');
+			const form = document.querySelector('form');
+			let searchText = 'cats';
+
+			let getImage = () => {
+				fetch(
+					`https://api.giphy.com/v1/gifs/translate?api_key=DHdVGyc50o1WHgRmp8UTaBJIDKBcd990&s=${searchText}`,
+					{ mode: 'cors' }
+				)
+					.then(function (response) {
+						return response.json();
+					})
+					.then(function (response) {
+						img.src = response.data.images.original.url;
+					});
+			};
+			getImage();
+			button.addEventListener('click', () => getImage());
+
+			form.addEventListener('submit', (e) => {
+				e.preventDefault();
+				searchText = form[1].value;
+				getImage();
+			});
+		</script>
+	</body>
+</html>
